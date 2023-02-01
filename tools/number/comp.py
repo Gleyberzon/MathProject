@@ -1,9 +1,11 @@
-import MyFunctions
+from MyFunctions import *
 
 
 class Comp:
     flag=False
-    dc = MyFunctions.get_vars()
+    dc = get_vars()
+
+    # Calculates sum of digits by + 'mod' 10
     def sumofdigits(num):
         """
         Name: Roman Gleyberzon
@@ -12,16 +14,23 @@ class Comp:
         Input: int number
         Output: sum
         """
+        Log(Comp.dc["PATH_LOG"], Comp.dc["LOG_MESS_CALLED"].format("sumofdigits"))
         if Comp.flag==False:
+            Log(Comp.dc["PATH_LOG"], Comp.dc["LOG_MESS_FLAG_ERR"].format("sumofdigits"))
             raise ConnectionAbortedError(Comp.dc['ERR_NOT_CALLED_SIMP_FUN'])
         if not isinstance(num, int):
-            raise ValueError(Comp.dc["ERR_NOT_INT_NUM"])
+            Log(Comp.dc["PATH_LOG"], Comp.dc["ERR_NOT_INT_NUM"].format(num))
+            raise ValueError(Comp.dc["ERR_NOT_INT_NUM"].format(num))
         sum = 0
+        copynum=num
         while num != 0:
             sum += num % 10
             num = num // 10
+        Log(Comp.dc["PATH_LOG"], Comp.dc["LOG_MESS_SUM_DIGITS"].format(copynum, sum))
         return sum
 
+
+    # Recursive exam of polindrome number
     def ispal(num):
         """
         Name: Roman Gleyberzon
@@ -30,10 +39,13 @@ class Comp:
         Input: int number
         Output: isPolindrome True / False
         """
+        Log(Comp.dc["PATH_LOG"], Comp.dc["LOG_MESS_CALLED"].format("ispal"))
         if Comp.flag==False:
+            Log(Comp.dc["PATH_LOG"], Comp.dc["LOG_MESS_FLAG_ERR"].format("ispal"))
             raise ConnectionAbortedError(Comp.dc['ERR_NOT_CALLED_SIMP_FUN'])
         if not isinstance(num, int):
-            raise ValueError(Comp.dc["ERR_NOT_INT_NUM"])
+            Log(Comp.dc["PATH_LOG"], Comp.dc["ERR_NOT_INT_NUM"].format(num))
+            raise ValueError(Comp.dc["ERR_NOT_INT_NUM"].format(num))
         str_num = str(num)
         if len(str_num) == 1:
             return True

@@ -1,7 +1,7 @@
 import MyFunctions
-from tools.number.comp import *
 from tools.number.simp import *
 from tools.col import *
+import os
 import pytest
 
 
@@ -27,6 +27,7 @@ def test_sum_1():
         LogTest(path, testName, testDescription, parametres, expected, actual, False)
         assert False
 
+
 # Test sum with incorrect parametres
 def test_sum_2():
     try:
@@ -44,6 +45,7 @@ def test_sum_2():
         actual = expected
         LogTest(path, testName, testDescription, parametres, expected, actual, True)
         assert True
+
 
 # Test substraction with correct parametres
 def test_sub_1():
@@ -102,6 +104,7 @@ def test_polindrome_1():
         actual="Error"
         LogTest(path, testName, testDescription, parametres, expected, actual, False)
         assert False
+
 
 # Test polindrome with polindrome number having only 1 digit
 def test_polindrome_2():
@@ -200,6 +203,7 @@ def test_sum_digits_2():
         LogTest(path, testName, testDescription, parametres, expected, actual, True)
         assert True
 
+
 # Check acsess to functions of Comp with previously calling function in Simp
 def test_script_1():
     try:
@@ -210,6 +214,7 @@ def test_script_1():
         testDescription = "Run function SUM from Simp, and after run function SUMOFDIGITS from Comp"
         parametres = f"Num: {num}, a: {a}, b: {b}"
         expected = f"Not raised error"
+        Comp.flag = False
         Simp.add(a,b)
         Comp.sumofdigits(num)
         actual = expected
@@ -220,6 +225,7 @@ def test_script_1():
         LogTest(path, testName, testDescription, parametres, expected, actual, False)
         assert False
 
+
 # Check acsess to functions of Comp without calling function in Simp
 def test_script_2():
     try:
@@ -229,7 +235,8 @@ def test_script_2():
         testName = "test_script_2"
         testDescription = "Run function SUMOFDIGITS from Comp, and after run function SUM from Simp"
         parametres = f"Num: {num}, a: {a}, b: {b}"
-        expected = f"Not raised error"
+        expected = f"Raised error"
+        Comp.flag=False
         Comp.sumofdigits(num)
         Simp.add(a, b)
         actual = "Not raised error"
@@ -239,3 +246,52 @@ def test_script_2():
         actual = expected
         LogTest(path, testName, testDescription, parametres, expected, actual, True)
         assert True
+
+@pytest.mark.zip
+# Check myzip function with correct path
+def test_myzip_1():
+    try:
+        folder1 = dc["PATH_FOLDER_1"]
+        folder2 = dc["PATH_FOLDER_2"]
+        testName = "test_myzip_1"
+        testDescription = "Trying to create zip file from given folders"
+        parametres = f"Path to folder 1: {folder1}\t, path to folder 2: {folder2}"
+        expected = f"Created zip file: {dc['PATH_ZIP_FILE']}"
+        Zip.myzip(folder1,folder2)
+        if os.path.exists(dc["PATH_ZIP_FILE"]):
+            actual = expected
+            assert True
+            LogTest(path, testName, testDescription, parametres, expected, actual, True)
+        else:
+            assert False
+    except AssertionError:
+        actual="Zip file was not created"
+        LogTest(path, testName, testDescription, parametres, expected, actual, False)
+    except Exception as e:
+        actual=f"Happend error during procedure: {e}"
+        LogTest(path, testName, testDescription, parametres, expected, actual, False)
+        assert False
+
+
+# Check myzip function with incorrect path
+def test_myzip_2():
+    try:
+        folder1 = dc["PATH_FOLDER_1"]
+        folder2 = dc["PATH_WRONG"]
+        testName = "test_myzip_2"
+        testDescription = "Trying to create zip file from given folders"
+        parametres = f"Path to folder 1: {folder1}\t, path to folder 2: {folder2}"
+        expected = f"Raised FileExistError"
+        Zip.myzip(folder1,folder2)
+        if os.path.exists(dc["PATH_ZIP_FILE"]):
+            actual = f"Created zip file: {dc['PATH_ZIP_FILE']}"
+            raise AssertionError
+    except FileExistsError:
+        actual=expected
+        LogTest(path, testName, testDescription, parametres, expected, actual, True)
+        assert True
+    except AssertionError:
+        LogTest(path, testName, testDescription, parametres, expected, actual, False)
+    except Exception as e:
+        actual=f"Raised other exception: {e}"
+        LogTest(path, testName, testDescription, parametres, expected, actual, False)
