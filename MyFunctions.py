@@ -54,7 +54,7 @@ def LogTest(path,testName, testDescription,parametres, expected, actual, isPasse
         print("Log writing error")
 
 
-def get_vars():
+def get_vars(env=".env"):
     """
     Name: Roman Gleyberzon
     Date: 18/1/2023
@@ -62,9 +62,9 @@ def get_vars():
     Input: Content of log
     Output: None
     """
-    load_dotenv()
+    load_dotenv(env)
     dc = {}
-    edc = dict(dotenv_values())
+    edc = dict(dotenv_values(env))
     for key in edc.keys():
         try:
             dc[key]=ast.literal_eval(edc[key])
